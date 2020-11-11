@@ -1,0 +1,443 @@
+> show databases
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use mydb
+switched to db mydb
+> show db
+uncaught exception: Error: don't know how to show [db] :
+shellHelper.show@src/mongo/shell/utils.js:1191:11
+shellHelper@src/mongo/shell/utils.js:819:15
+@(shellhelp2):1:1
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use mydb
+switched to db mydb
+> db.createCollection("Employee")
+{ "ok" : 1 }
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+mydb    0.000GB
+> show collections;
+Employee
+> show tables;
+Employee
+> db.Employee.insert({name : "Ravi", age: 21})
+WriteResult({ "nInserted" : 1 })
+> show tables
+Employee
+> db.Employee.insert({name : "Ravi", lname : "Kumar"})
+WriteResult({ "nInserted" : 1 })
+> db.Employee.insert({name : "Mahesh", lname : "Patil", age:34})
+WriteResult({ "nInserted" : 1 })
+> db.Employee.insert({name : "Dominic", lname : "Xavier", city : "Delhi"})
+WriteResult({ "nInserted" : 1 })
+> db.Employee.find()
+{ "_id" : ObjectId("5fa97a7f5f09ace1d4f1d580"), "name" : "Ravi", "age" : 21 }
+{ "_id" : ObjectId("5fa97b125f09ace1d4f1d581"), "name" : "Ravi", "lname" : "Kumar" }
+{ "_id" : ObjectId("5fa97b285f09ace1d4f1d582"), "name" : "Mahesh", "lname" : "Patil", "age" : 34 }
+{ "_id" : ObjectId("5fa97b915f09ace1d4f1d583"), "name" : "Dominic", "lname" : "Xavier", "city" : "Delhi" }
+> db.Emp.insert({_id:100, name:"Ravi", salary:12000});
+WriteResult({ "nInserted" : 1 })
+> show tables
+Emp
+Employee
+> show collections
+Emp
+Employee
+> db.Emp.insert({_id:100, name:"Ramesh", salary:14000});
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: mydb.Emp index: _id_ dup key: { _id: 100.0 }"
+        }
+})
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+> db.Emp.insert({id:100, name:"Ramesh", salary:14000});
+WriteResult({ "nInserted" : 1 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 14000 }
+> db.Emp.insert({_id:103, name:"Dominic", salary:69400, age:27, city:"Delhi", state"NY"});
+uncaught exception: SyntaxError: missing : after property id :
+@(shell):1:81
+> db.Emp.insert({_id:103, name:"Dominic", salary:69400, age:27, city:"Delhi", state:"NY"});
+WriteResult({ "nInserted" : 1 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 14000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 69400, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.find().pretty
+function() {
+    this._prettyShell = true;
+    return this;
+}
+> db.Emp.find().pretty()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{
+        "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"),
+        "id" : 100,
+        "name" : "Ramesh",
+        "salary" : 14000
+}
+{
+        "_id" : 103,
+        "name" : "Dominic",
+        "salary" : 69400,
+        "age" : 27,
+        "city" : "Delhi",
+        "state" : "NY"
+}
+> db.Emp.find()[1]
+{
+        "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"),
+        "id" : 100,
+        "name" : "Ramesh",
+        "salary" : 14000
+}
+> db.Emp.find()[2]
+{
+        "_id" : 103,
+        "name" : "Dominic",
+        "salary" : 69400,
+        "age" : 27,
+        "city" : "Delhi",
+        "state" : "NY"
+}
+> db.Emp.find().foreach(printjson)
+uncaught exception: TypeError: db.Emp.find(...).foreach is not a function :
+@(shell):1:1
+> db.Emp.find().forEach(printjson)
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{
+        "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"),
+        "id" : 100,
+        "name" : "Ramesh",
+        "salary" : 14000
+}
+{
+        "_id" : 103,
+        "name" : "Dominic",
+        "salary" : 69400,
+        "age" : 27,
+        "city" : "Delhi",
+        "state" : "NY"
+}
+> db.Emp.find()[0]._id
+100
+> db.Emp.find()._id
+> db.Emp.find()[2]._id
+103
+> db.Emp.find()({},{name:1})
+uncaught exception: TypeError: db.Emp.find(...) is not a function :
+@(shell):1:1
+> db.Emp.find({},{name:1})
+{ "_id" : 100, "name" : "Ravi" }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "name" : "Ramesh" }
+{ "_id" : 103, "name" : "Dominic" }
+> db.Emp.find({},{salary:-1,_id:0})
+{ "salary" : 12000 }
+{ "salary" : 14000 }
+{ "salary" : 69400 }
+> db.Emp.find({},{salary:100000000,_id:0})
+{ "salary" : 12000 }
+{ "salary" : 14000 }
+{ "salary" : 69400 }
+> db.Emp.find({salary > 50000},{salary:100000000,_id:0})
+uncaught exception: SyntaxError: missing : after property id :
+@(shell):1:20
+> db.Emp.find({salary : 50000},{salary:100000000,_id:0})
+> db.Emp.find({name:"Ravi"},{salary:100000000,_id:0})
+{ "salary" : 12000 }
+> db.Emp.find({name:"Dominic"},{salary:100000000,_id:0})
+{ "salary" : 69400 }
+> db.Emp.find({name:"Dominix"},{salary:100000000,_id:0})
+> db.Emp.find({salary : +50000},{salary:100000000,_id:0})
+> db.Emp.find({salary : -50000},{salary:100000000,_id:0})
+> db.Emp.find({name:"Dominic"},{salary:-100000000,_id:0})
+{ "salary" : 69400 }
+> db.Emp.find({salary:{$gt:50000}},{salary:100000000,_id:0})
+{ "salary" : 69400 }
+> db.Emp.find({salary:{$gt:50000}},{_id:0})
+{ "name" : "Dominic", "salary" : 69400, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.find({salary:{$lt:50000}},{_id:0})
+{ "name" : "Ravi", "salary" : 12000 }
+{ "id" : 100, "name" : "Ramesh", "salary" : 14000 }
+> db.Emp.find({salary:{$gt:69400}},{_id:0})
+> db.Emp.find({salary:{$gte:69400}},{_id:0})
+{ "name" : "Dominic", "salary" : 69400, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.find({$and:[{name:"Ravi"},{salary:12000}]},{_id:0})
+{ "name" : "Ravi", "salary" : 12000 }
+> db.Emp.find({$or:[{name:"Ravi"},{salary:{$gte:14000}}]},{_id:0})
+{ "name" : "Ravi", "salary" : 12000 }
+{ "id" : 100, "name" : "Ramesh", "salary" : 14000 }
+{ "name" : "Dominic", "salary" : 69400, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.find({$and:[{name:"Ravi"},{salary:{$gte:14000}}]},{_id:0})
+> db.Emp.find({$and:[{name:"Ravi"},{salary:{$gte:12000}}]},{_id:0})
+{ "name" : "Ravi", "salary" : 12000 }
+> db.Emp.find({$and:[{salary:{$gte:12000}}]},{_id:0})
+{ "name" : "Ravi", "salary" : 12000 }
+{ "id" : 100, "name" : "Ramesh", "salary" : 14000 }
+{ "name" : "Dominic", "salary" : 69400, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.emp.update({},{$set:{salary:25000}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.emp.update({},{$set:{salary:12000}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 14000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 69400, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.emp.update({},{$set:{salary:12000}},{multi:true)
+... ^C
+
+> db.emp.update({},{$set:{salary:12000}},{multi:true})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 14000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 69400, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.update({},{$set:{salary:12000}},{multi:true})
+WriteResult({ "nMatched" : 3, "nUpserted" : 0, "nModified" : 2 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 12000, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.emp.update({name :"Dominic"},{$set:{salary:15000}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.Emp.update({name :"Dominic"},{$set:{salary:15000}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.Emp.find()'
+uncaught exception: SyntaxError: '' literal not terminated before end of script :
+@(shell):1:14
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12000 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 15000, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.update({name:"Ravi"},{$inc:{salary:500}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12500 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 15000, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.update({name :"Dominic"},{$set:{salary:15000}},{upsert:true})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12500 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 15000, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.update({name :"Dominic"},{$set:{salary:15500}},{upsert:true})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12500 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 15500, "age" : 27, "city" : "Delhi", "state" : "NY" }
+> db.Emp.update({name :"Ann"},{$set:{salary:15500}},{upsert:true})
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 1,
+        "nModified" : 0,
+        "_id" : ObjectId("5fa99fafc9540d08451590b2")
+})
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12500 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 15500, "age" : 27, "city" : "Delhi", "state" : "NY" }
+{ "_id" : ObjectId("5fa99fafc9540d08451590b2"), "name" : "Ann", "salary" : 15500 }
+> db.Emp.update({name :"Ann"},{$set:{city:"Long Island}})
+uncaught exception: SyntaxError: "" literal not terminated before end of script :
+@(shell):1:55
+> db.Emp.update({name :"Ann"},{$set:{city:"Long Island"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12500 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 15500, "age" : 27, "city" : "Delhi", "state" : "NY" }
+{ "_id" : ObjectId("5fa99fafc9540d08451590b2"), "name" : "Ann", "salary" : 15500, "city" : "Long Island" }
+> db.Emp.find()
+{ "_id" : 100, "name" : "Ravi", "salary" : 12500 }
+{ "_id" : ObjectId("5fa98d3c5f09ace1d4f1d584"), "id" : 100, "name" : "Ramesh", "salary" : 12000 }
+{ "_id" : 103, "name" : "Dominic", "salary" : 15500, "age" : 27, "city" : "Delhi", "state" : "NY" }
+{ "_id" : ObjectId("5fa99fafc9540d08451590b2"), "name" : "Ann", "salary" : 15500, "city" : "Long Island" }
+> db.Emp.drop()
+true
+> db.Emp.find()
+> show collections
+Employee
+
+
+
+
+
+
+
+
+
+
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+mydb    0.000GB
+> show collections
+> db.Person.insert({_id:100, pname:"Mahesh", age : 21, add :{city:"Bangalore", state:"Karnataka"}})
+WriteResult({ "nInserted" : 1 })
+> db.Person.insert({_id:101, pname:"Ravi", age : 32, add :{city:"Mumbai", state:"Maha"}})
+WriteResult({ "nInserted" : 1 })
+> db.Person.find()
+{ "_id" : 100, "pname" : "Mahesh", "age" : 21, "add" : { "city" : "Bangalore", "state" : "Karnataka" } }
+{ "_id" : 101, "pname" : "Ravi", "age" : 32, "add" : { "city" : "Mumbai", "state" : "Maha" } }
+> db.Person.find()[0].add.city;
+Bangalore
+> db.Person.insert({_id:102, pname:"Kant", age : 43, add :[{"city":"Mumbai,"state":"Maha},{"city":"Delhi","state":"Delhi"}]})
+uncaught exception: SyntaxError: missing } after property list :
+@(shell):1:74
+> db.Person.insert({_id:102, pname:"Kant", age : 43, add :[{"city":"Mumbai,"state":"Maha"},{"city":"Delhi","state":"Delhi"}]})
+uncaught exception: SyntaxError: missing } after property list :
+@(shell):1:74
+> db.Person.insert({_id:102, pname:"Kant", age : 43, add :[{"city":"Mumbai","state":"Maha"},{"city":"Delhi","state":"Delhi"}]})
+WriteResult({ "nInserted" : 1 })
+> db.Person.find()[0].pretty()
+uncaught exception: TypeError: db.Person.find(...)[0].pretty is not a function :
+@(shell):1:1
+> db.Person.find().pretty()
+{
+        "_id" : 100,
+        "pname" : "Mahesh",
+        "age" : 21,
+        "add" : {
+                "city" : "Bangalore",
+                "state" : "Karnataka"
+        }
+}
+{
+        "_id" : 101,
+        "pname" : "Ravi",
+        "age" : 32,
+        "add" : {
+                "city" : "Mumbai",
+                "state" : "Maha"
+        }
+}
+{
+        "_id" : 102,
+        "pname" : "Kant",
+        "age" : 43,
+        "add" : [
+                {
+                        "city" : "Mumbai",
+                        "state" : "Maha"
+                },
+                {
+                        "city" : "Delhi",
+                        "state" : "Delhi"
+                }
+        ]
+}
+> db.createCollection("Trainer");
+{ "ok" : 1 }
+> db.createCollection("Student");
+{ "ok" : 1 }
+> show collections
+Person
+Student
+Trainer
+> db.Trainer.insert({_id:1, name:"raj, tech:"Java"})
+uncaught exception: SyntaxError: missing } after property list :
+@(shell):1:43
+> db.Trainer.insert({_id:1, name:"Raj", tech:"Java"})
+WriteResult({ "nInserted" : 1 })
+> db.Trainer.insert({_id:1, name:"Ravi", tech:"dotnet"})
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: test.Trainer index: _id_ dup key: { _id: 1.0 }"
+        }
+})
+> db.Trainer.insert({_id:2, name:"Ravi", tech:"dotnet"})
+WriteResult({ "nInserted" : 1 })
+> db.Trainer.insert({_id:3, name:"Ramesh", tech:"angular"})
+WriteResult({ "nInserted" : 1 })
+> db.Trainer.find()
+{ "_id" : 1, "name" : "Raj", "tech" : "Java" }
+{ "_id" : 2, "name" : "Ravi", "tech" : "dotnet" }
+{ "_id" : 3, "name" : "Ramesh", "tech" : "angular" }
+> db.Student.insert({_id:100, sname:"Seeta", ts_id:db.Trainer.find()[0]})
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({_id:101, sname:"Reeta", ts_id:db.Trainer.find()[0]})
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({_id:102, sname:"Geeta", ts_id:db.Trainer.find()[1]})
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({_id:103, sname:"Sangeeta", ts_id:db.Trainer.find()[1]})
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({_id:104, sname:"Teeta", ts_id:db.Trainer.find()[2]})
+WriteResult({ "nInserted" : 1 })
+> db.Trainer.find().pretty()
+{ "_id" : 1, "name" : "Raj", "tech" : "Java" }
+{ "_id" : 2, "name" : "Ravi", "tech" : "dotnet" }
+{ "_id" : 3, "name" : "Ramesh", "tech" : "angular" }
+> db.Student.find().pretty()
+{
+        "_id" : 100,
+        "sname" : "Seeta",
+        "ts_id" : {
+                "_id" : 1,
+                "name" : "Raj",
+                "tech" : "Java"
+        }
+}
+{
+        "_id" : 101,
+        "sname" : "Reeta",
+        "ts_id" : {
+                "_id" : 1,
+                "name" : "Raj",
+                "tech" : "Java"
+        }
+}
+{
+        "_id" : 102,
+        "sname" : "Geeta",
+        "ts_id" : {
+                "_id" : 2,
+                "name" : "Ravi",
+                "tech" : "dotnet"
+        }
+}
+{
+        "_id" : 103,
+        "sname" : "Sangeeta",
+        "ts_id" : {
+                "_id" : 2,
+                "name" : "Ravi",
+                "tech" : "dotnet"
+        }
+}
+{
+        "_id" : 104,
+        "sname" : "Teeta",
+        "ts_id" : {
+                "_id" : 3,
+                "name" : "Ramesh",
+                "tech" : "angular"
+        }
+}
+> db.Studnet.find({"ts_id.name":"Raj"})
+> db.Student.find({"ts_id.name":"Raj"})
+{ "_id" : 100, "sname" : "Seeta", "ts_id" : { "_id" : 1, "name" : "Raj", "tech" : "Java" } }
+{ "_id" : 101, "sname" : "Reeta", "ts_id" : { "_id" : 1, "name" : "Raj", "tech" : "Java" } }
+> db.Student.find({"ts_id._id":"Raj"})
+> db.Student.find({"ts_id.id":"Raj"})
+> db.Student.find({"ts_id._id":1})
+{ "_id" : 100, "sname" : "Seeta", "ts_id" : { "_id" : 1, "name" : "Raj", "tech" : "Java" } }
+{ "_id" : 101, "sname" : "Reeta", "ts_id" : { "_id" : 1, "name" : "Raj", "tech" : "Java" } }
